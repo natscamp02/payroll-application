@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../partials/alerts') -%>
+
+        <main>
+            <div class="grid grid-cols-[1fr,_0.75fr]">
+                <img class="w-full h-screen object-cover" src="/images/login-bg.jpg" alt="">
+
+                <div class="">
+                    <header class="p-4 text-center">
+                        <h1>Serhant Construction</h1>
+                    </header>
+
+                    <div class="container pt-12">
+                        <h1 class="text-3xl mb-8">Login To Your Account</h1>
+
+                        <form action="/auth/login" method="post">
+                            <div class="space-y-4">
+                                <div class="form-control">
+                                    <label class="label" for="email">
+                                        <span class="label-text">Email</span>
+                                    </label>
+                                    <input class="input input-bordered w-full max-w-xs" type="email" name="email"
+                                        id="email">
+                                </div>
+
+                                <div class="form-control">
+                                    <label class="label" for="password">
+                                        <span class="label-text">Password</span>
+                                    </label>
+                                    <input class="input input-bordered w-full max-w-xs" type="password" name="password"
+                                        id="password">
+                                </div>
+                            </div>
+
+                            <p class="mt-8 mb-4"><a class="text-primary hover:underline" href="/auth/forgot">Forgot your
+                                    password?</a></p>
+
+                            <button class="btn btn-primary" type="submit">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+</body>
+
+</html>

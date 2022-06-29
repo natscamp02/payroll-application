@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../partials/sidebar', { activeLink: 'profile' }) -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <h1 class="heading">Your Profile</h1>
+
+                    <section class="mb-16">
+                        <h2 class="">Update your information</h2>
+                        <form action="/profile/update/info" method="post">
+
+                            <div class="space-y-4">
+                                <div class="form-control max-w-xs">
+                                    <label for="first_name" class="label">
+                                        <span class="label-text">First Name</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="text" name="first_name" id="first_name"
+                                        value="<%= account.first_name %>" required>
+                                </div>
+
+                                <div class="form-control max-w-xs">
+                                    <label for="last_name" class="label">
+                                        <span class="label-text">Last Name</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="text" name="last_name" id="last_name"
+                                        value="<%= account.last_name %>" required>
+                                </div>
+
+                                <div class="form-control max-w-xs">
+                                    <label for="email" class="label">
+                                        <span class="label-text">Email Address</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="email" name="email" id="email"
+                                        value="<%= account.email %>" required>
+                                </div>
+
+                            </div>
+
+                            <button class="btn btn-primary mt-8" type="submit">Save changes</button>
+                        </form>
+                    </section>
+
+                    <section class="mb-16">
+                        <h2>Update your password</h2>
+
+                        <form action="/profile/update/password" method="post">
+                            <div class="space-y-4">
+                                <div class="form-control max-w-xs">
+                                    <label for="current_password" class="label">
+                                        <span class="label-text">Current Password</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="password" name="current_password"
+                                        id="current_password" required>
+                                </div>
+
+                                <div class="form-control max-w-xs">
+                                    <label for="new_password" class="label">
+                                        <span class="label-text">New Password</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="password" name="new_password"
+                                        id="new_password" required>
+                                </div>
+
+                                <div class="form-control max-w-xs">
+                                    <label for="confirm_password" class="label">
+                                        <span class="label-text">Confirm Password</span>
+                                    </label>
+
+                                    <input class="input input-bordered" type="password" name="confirm_password"
+                                        id="confirm_password" required>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary mt-8" type="submit">Update password</button>
+                        </form>
+                    </section>
+                </div>
+        </main>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../partials/sidebar') -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <h1 class="heading">Add a new employee</h1>
+
+                    <form action="/employees/add" method="post">
+                        <div class="space-y-6">
+                            <div class="form-control max-w-xs">
+                                <label for="first_name" class="label">
+                                    <span class="label-text">First Name</span>
+                                </label>
+
+                                <input class="input input-bordered" type="text" name="first_name" id="first_name"
+                                    required>
+                            </div>
+
+                            <div class="form-control max-w-xs">
+                                <label for="last_name" class="label">
+                                    <span class="label-text">Last Name</span>
+                                </label>
+
+                                <input class="input input-bordered" type="text" name="last_name" id="last_name"
+                                    required>
+                            </div>
+
+                            <div class="form-control max-w-xs">
+                                <label for="email" class="label">
+                                    <span class="label-text">Email Address</span>
+                                </label>
+
+                                <input class="input input-bordered" type="email" name="email" id="email" required>
+                            </div>
+
+
+                            <% if (locals.user.department.name==='Accounts' ) { %>
+                                <div class="form-control max-w-xs">
+                                    <label for="position" class="label">
+                                        <span class="label-text">Position</span>
+                                    </label>
+
+                                    <select class="select select-bordered" name="position" id="position">
+                                        <option value="employee">Employee</option>
+                                        <option value="accountant">Accountant</option>
+                                    </select>
+                                </div>
+                                <% } %>
+                        </div>
+
+                        <button class="btn btn-primary mt-8" type="submit">Create</button>
+                    </form>
+                </div>
+        </main>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../partials/sidebar') -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <h1 class="heading">Edit an employee</h1>
+
+                    <form action="/employees/update" method="post">
+                        <input type="hidden" name="account_id" id="account_id" value="<%= account.id %>">
+
+                        <div class="space-y-6">
+                            <div class="form-control">
+                                <label for="first_name" class="label">
+                                    <span class="label-text">First Name</span>
+                                </label>
+
+                                <input class="input input-bordered max-w-xs" type="text" name="first_name"
+                                    id="first_name" value="<%= account.first_name %>" required>
+                            </div>
+
+                            <div class="form-control">
+                                <label for="last_name" class="label">
+                                    <span class="label-text">Last Name</span>
+                                </label>
+
+                                <input class="input input-bordered max-w-xs" type="text" name="last_name" id="last_name"
+                                    value="<%= account.last_name %>" required>
+                            </div>
+
+                            <div class="form-control">
+                                <label for="email" class="label">
+                                    <span class="label-text">Email Address</span>
+                                </label>
+
+                                <input class="input input-bordered max-w-xs" type="email" name="email" id="email"
+                                    value="<%= account.email %>" required>
+                            </div>
+
+
+                            <% if (locals.user.department.name==='Accounts' ) { %>
+                                <div class="form-control">
+                                    <label for="position" class="label">
+                                        <span class="label-text">Position</span>
+                                    </label>
+
+                                    <select class="select select-bordered max-w-xs" name="position" id="position">
+                                        <option value="employee" <%- account.position==='employee' ? 'selected' : '' -%>
+                                            >Employee</option>
+                                        <option value="accountant" <%- account.position==='accountant' ? 'selected' : ''
+                                            -%>>Accountant</option>
+                                    </select>
+                                </div>
+                                <% } %>
+                        </div>
+
+                        <button class="btn btn-primary mt-8" type="submit">Save changes</button>
+                    </form>
+                </div>
+        </main>
+</body>
+
+</html>
