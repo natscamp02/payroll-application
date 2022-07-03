@@ -6,7 +6,7 @@ You are required to create a Payroll application for the Serhant Construction Co
 
 **NOTE**: Some employees may work overtime. The system should calculate the necessary overtime based on the department the employee works in. The departments are Operations, Sales & Marketing, Administration and Accounts
 
-Attention must be made to allowing the Accounts Staff to be able to:
+**Attention must be made to allowing the Accounts Staff to be able to:**
 
 -   Retrieve entered salary information entered by supervisors (A message or meaningful indicator should be displayed if information is missing.)
 -   Retrieve an employee's salary information given a Pay Cycle or a Date Range (Ranges should give a summary information over the date range - Using Aggregate Functions)

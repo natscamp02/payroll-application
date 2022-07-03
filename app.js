@@ -10,12 +10,15 @@ const authRouter = require('./routes/auth');
 const employeesRouter = require('./routes/employees');
 const payrollRouter = require('./routes/payroll');
 const profileRouter = require('./routes/profile');
+const { formatDate, formatNumber } = require('./utils');
 
 const app = express();
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.locals.formatNumber = formatNumber;
+app.locals.formatDate = formatDate;
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -60,6 +63,12 @@ app.all('*', (req, res, next) => {
 // Error handler
 app.use(function (err, req, res, next) {
 	console.log(err);
+
+	if (err.message.startsWith('Duplicate entry')) {
+		const key = err.message.split('key')[1].split('.')[1].replace("_UNIQUE'", '');
+		req.flash('error', `That ${key} is already registered`);
+		res.redirect('back');
+	}
 
 	// set locals, only providing error in development
 	res.locals.message = err.message;

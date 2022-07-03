@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../partials/sidebar', { activeLink: 'payroll' }) -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <div class="text-sm breadcrumbs mb-4">
+                        <ul>
+                            <li><a href="/payroll">Payroll</a></li>
+                            <li><a href="#">Summary</a></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="heading text-4xl mb-6">Salary Summary</h1>
+
+                    <div class="text-gray-600 text-lg mb-8 space-y-1">
+                        <p>
+                            <span class="text-black">Department: </span>
+                            <%= data.dprt_name %>
+                        </p>
+                        <p>
+                            <span class="text-black">Start Date: </span>
+                            <%= formatDate(data.start_date) %>
+                        </p>
+                        <p>
+                            <span class="text-black">End Date: </span>
+                            <%= formatDate(data.end_date) %>
+                        </p>
+                    </div>
+
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Amount</th>
+                                <th>Rate</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Total Number of Hours Worked</th>
+                                <td>
+                                    <%= formatNumber(data.total_hours) %>
+                                </td>
+                                <td>
+                                    <%= formatNumber(data.pay_rate) %>
+                                </td>
+                                <td>
+                                    <%= formatNumber(data.total_hours * data.pay_rate) %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Number of Hours Overtime</th>
+                                <td>
+                                    <%= formatNumber(data.total_overtime) %>
+                                </td>
+                                <td>
+                                    <%= formatNumber(data.overtime_rate) %>
+                                </td>
+                                <td>
+                                    <%= formatNumber(data.total_overtime * data.overtime_rate) %>
+                                </td>
+                            </tr>
+                            <tr class="border-t-2">
+                                <th colspan="2"></th>
+                                <th>Total Pay</th>
+                                <td>
+                                    <%= formatNumber(data.total_pay) %>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </main>
+</body>
+
+</html>

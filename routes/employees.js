@@ -1,4 +1,5 @@
 const express = require('express');
+const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 const conn = require('../db');
 const { protect, handleSQLErrors, restrictTo, limitFields } = require('../utils');
@@ -14,7 +15,11 @@ router.get('/', (req, res, next) => {
 	if (req.session.user.role === 'supervisor')
 		sqlQuery += ' AND staff.department_id = ' + req.session.user.department.id;
 
-	if (req.session.user.role === 'accountant') sqlQuery += ' AND NOT staff.id = ' + req.session.user.id;
+	if (req.query.search) {
+		let [fName, lName] = req.query.search.split(' ');
+		sqlQuery += ` AND staff.first_name LIKE '%${fName}%'`;
+		lName && (sqlQuery += ` AND staff.last_name LIKE '%${lName}%'`);
+	}
 
 	sqlQuery += ' ORDER BY staff.id';
 
@@ -37,12 +42,27 @@ router.post('/add', restrictTo('supervisor'), async (req, res, next) => {
 	data.position ||= 'employee';
 	data.department_id = Number.parseInt(req.session.user.department.id);
 
+	// Add employee to database
 	conn.query(
 		`INSERT INTO staff (first_name, last_name, email, position, password, department_id) VALUES (?,?,?,?,?,?)`,
 		Object.values(data),
 		handleSQLErrors(next, (result) => {
-			req.flash('success', 'Account created successfully');
-			res.redirect('/employees');
+			// Get active paycycle
+			conn.query(
+				'SELECT * FROM paycycles WHERE active = 1',
+				handleSQLErrors(next, ([paycycle]) => {
+					if (!paycycle) throw new Error('No active paycycle found');
+
+					// Add employee data to payroll
+					conn.query(
+						`INSERT INTO payroll (employee_id, paycycle_id) VALUES (${result.insertId}, ${paycycle.id})`,
+						handleSQLErrors(next, () => {
+							req.flash('success', 'Account created successfully');
+							res.redirect('/employees');
+						})
+					);
+				})
+			);
 		})
 	);
 });
@@ -69,11 +89,11 @@ router.post('/update', (req, res, next) => {
 	);
 });
 
-router.get('/:id/delete', restrictTo('supervisor'), (req, res, next) => {
+router.get('/:id/delete', (req, res, next) => {
 	conn.query(
-		'DELETE FROM staff WHERE id = ' + req.params.id,
+		`DELETE FROM staff WHERE id = ${req.params.id}`,
 		handleSQLErrors(next, () => {
-			req.flash('success', 'Accont deleted successfully');
+			req.flash('success', 'Employee deleted successfully');
 			res.redirect('/employees');
 		})
 	);

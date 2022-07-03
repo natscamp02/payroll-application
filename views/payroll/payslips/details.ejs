@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../../partials/sidebar') -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <div class="px-12">
+                        <div class="text-sm breadcrumbs">
+                            <ul>
+                                <li><a href="/payroll">Payroll</a></li>
+                                <li><a href="#">Payslip</a></li>
+                            </ul>
+                        </div>
+
+
+                        <div class="flex justify-between items-center mb-8">
+                            <h1 class="heading mb-0 text-center">
+                                <%= data.first_name + " " + data.last_name + "'s Payslip" %>
+                            </h1>
+
+                            <form class="" action="/payroll/<%= data.employee_id %>/payslips" method="post">
+                                <div class="form-control max-w-xs">
+                                    <div class="input-group items-center">
+                                        <select class="select select-bordered" name="paycycle_id" id="paycycle_id">
+                                            <% paycycles.forEach(cycle=> { %>
+                                                <option value="<%= cycle.id %>" <%- cycle.id===data.paycycle_id
+                                                    ? 'selected' : '' -%>>
+                                                    <%= (formatDate(cycle.start_date, 'MMM. D' ) + ' - '
+                                                        +formatDate(cycle.end_date,'MMM. D')) %>
+
+                                                        <%= cycle.id===data.paycycle_id ? '(Current)' : '' %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+
+                                        <button class="btn btn-primary" type="submit">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="text-gray-500 mb-8 flex justify-between">
+                            <div>
+                                <p>
+                                    <span class="text-black">Date Joined:</span>
+                                    <%= formatDate(data.date_joined) %>
+                                </p>
+                                <p>
+                                    <span class="text-black">
+                                        Pay Period:
+                                    </span>
+                                    <%= (formatDate(data.start_date ) + ' - ' +formatDate(data.end_date)) %>
+                                </p>
+                                <p>
+                                    <span class="text-black">
+                                        Days Absent:
+                                    </span>
+                                    <%= data.days_absent %>
+                                </p>
+                            </div>
+
+                            <div>
+                                <p>
+                                    <span class="text-black">
+                                        Department:
+                                    </span>
+                                    <%= data.dprt_name %>
+                                </p>
+                                <p class="capitalize">
+                                    <span class="text-black">
+                                        Position:
+                                    </span>
+                                    <%= data.position %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <table class="table w-full">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Amount</th>
+                                    <th>Rate</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Hours Worked</th>
+                                    <td>
+                                        <%= data.hours_worked %>
+                                    </td>
+                                    <td>
+                                        <%= formatNumber(data.pay_rate) %>
+                                    </td>
+                                    <td>
+                                        <%= formatNumber(data.pay_rate * data.hours_worked) %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Overtime Hours</th>
+                                    <td>
+                                        <%= data.hours_overtime %>
+                                    </td>
+                                    <td>
+                                        <%= formatNumber(data.overtime_rate) %>
+                                    </td>
+                                    <td>
+                                        <%= formatNumber(data.overtime_rate * data.hours_overtime) %>
+                                    </td>
+                                </tr>
+
+                                <tr class="border-t-2">
+                                    <th colspan="2"></th>
+                                    <th>
+                                        Net Pay
+                                    </th>
+                                    <td>
+                                        <%= formatNumber(data.net_pay) %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </main>
+
+
+</body>
+
+</html>

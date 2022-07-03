@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 const createError = require('http-errors');
 
 exports.protect = (req, res, next) => {
@@ -32,4 +33,11 @@ exports.handleSQLErrors = (next, fn) => (err, results, fields) => {
 	} catch (error) {
 		next(createError(400, error.message || 'Something went wrong'));
 	}
+};
+
+exports.formatNumber = (number) => {
+	return new Intl.NumberFormat('en-US').format(number);
+};
+exports.formatDate = (date, format = 'MMM. D, YYYY') => {
+	return dayjs(date).format(format);
 };

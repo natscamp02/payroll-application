@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../../partials/head') -%>
+</head>
+
+<body>
+    <%- include('../../partials/alerts') -%>
+
+        <main class="dashboard">
+            <%- include('../../partials/sidebar', { activeLink: 'payslip' }) -%>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="container">
+                    <h1 class="heading mb-4">
+                        All Payslips
+                    </h1>
+
+                    <h2 class="text-lg mb-8">
+                        For <%= employee.first_name + " " + employee.last_name %> (<%= employee.dprt_name %>)
+                    </h2>
+
+
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Paycycle</th>
+                                <th>Hours Worked</th>
+                                <th>Hours Overtime</th>
+                                <th>Net Pay</th>
+                                <th>Days Absent</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% results.forEach(res=> { %>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <%= res.start_date.toLocaleDateString() + ' - ' +
+                                            res.end_date.toLocaleDateString() %>
+                                    </td>
+                                    <td>
+                                        <%= res.hours_worked %>
+                                    </td>
+                                    <td>
+                                        <%= res.hours_overtime %>
+                                    </td>
+                                    <td>
+                                        <%= new
+                                            Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(res.net_pay)
+                                            %>
+                                    </td>
+                                    <td>
+                                        <%= res.days_absent %>
+                                    </td>
+                                    <td>
+                                        <a href="/payroll/<%= employee.employee_id %>/payslips/<%= res.paycycle_id %>"
+                                            class="btn">View Details</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+        </main>
+
+
+</body>
+
+</html>

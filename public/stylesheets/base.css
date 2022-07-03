@@ -37,3 +37,25 @@ main.dashboard > .divider {
 main.dashboard > .container {
 	@apply py-16 h-full overflow-y-auto;
 }
+
+.salary-input:disabled {
+	@apply bg-transparent border-none;
+}
+
+.edit-button.text-info + button[type='submit'] {
+	display: none;
+}
+
+.edit-button.text-info > .icon-edit {
+	display: inline-block;
+}
+.edit-button.text-info > .icon-close {
+	display: none;
+}
+
+.edit-button.text-error > .icon-edit {
+	display: none;
+}
+.edit-button.text-error > .icon-close {
+	display: inline-block;
+}
