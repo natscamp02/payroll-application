@@ -18,7 +18,8 @@
                         <div>
                             <h1 class="heading mb-2">Payroll</h1>
                             <span class="text-gray-500 text-lg">
-                                <%= paycycle.start_date.toDateString() + ' - ' + paycycle.end_date.toDateString() %>
+                                <%= formatDate(paycycle.start_date, 'MMMM D, YYYY' ) + ' - ' +
+                                    formatDate(paycycle.end_date, 'MMMM D, YYYY' ) %>
                             </span>
                         </div>
 

@@ -62,8 +62,6 @@ app.all('*', (req, res, next) => {
 
 // Error handler
 app.use(function (err, req, res, next) {
-	console.log(err);
-
 	if (err.message.startsWith('Duplicate entry')) {
 		const key = err.message.split('key')[1].split('.')[1].replace("_UNIQUE'", '');
 		req.flash('error', `That ${key} is already registered`);

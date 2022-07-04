@@ -28,25 +28,27 @@
                                 <%= data.first_name + " " + data.last_name + "'s Payslip" %>
                             </h1>
 
-                            <form class="" action="/payroll/<%= data.employee_id %>/payslips" method="post">
-                                <div class="form-control max-w-xs">
-                                    <div class="input-group items-center">
-                                        <select class="select select-bordered" name="paycycle_id" id="paycycle_id">
-                                            <% paycycles.forEach(cycle=> { %>
-                                                <option value="<%= cycle.id %>" <%- cycle.id===data.paycycle_id
-                                                    ? 'selected' : '' -%>>
-                                                    <%= (formatDate(cycle.start_date, 'MMM. D' ) + ' - '
-                                                        +formatDate(cycle.end_date,'MMM. D')) %>
+                            <% if (locals.paycycles?.length) { %>
+                                <form class="" action="/payroll/<%= data.employee_id %>/payslips" method="post">
+                                    <div class="form-control max-w-xs">
+                                        <div class="input-group items-center">
+                                            <select class="select select-bordered" name="paycycle_id" id="paycycle_id">
+                                                <% paycycles.forEach(cycle=> { %>
+                                                    <option value="<%= cycle.id %>" <%- cycle.id===data.paycycle_id
+                                                        ? 'selected' : '' -%>>
+                                                        <%= (formatDate(cycle.start_date, 'MMM. D' ) + ' - '
+                                                            +formatDate(cycle.end_date,'MMM. D')) %>
 
-                                                        <%= cycle.id===data.paycycle_id ? '(Current)' : '' %>
-                                                </option>
-                                                <% }) %>
-                                        </select>
+                                                            <%= cycle.id===data.paycycle_id ? '(Current)' : '' %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
 
-                                        <button class="btn btn-primary" type="submit">Filter</button>
+                                            <button class="btn btn-primary" type="submit">Filter</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                                <% } %>
                         </div>
 
                         <div class="text-gray-500 mb-8 flex justify-between">
