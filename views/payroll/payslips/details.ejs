@@ -17,7 +17,11 @@
                     <div class="px-12">
                         <div class="text-sm breadcrumbs">
                             <ul>
-                                <li><a href="/payroll">Payroll</a></li>
+                                <li><a
+                                        href="<%= locals.user.role !== 'employee'? '/payroll' :'/payroll/'+locals.user.id+'/payslips' %>">
+                                        <%= locals.user.role !=='employee' ? 'Payroll' :'Payslips' %>
+                                    </a>
+                                </li>
                                 <li><a href="#">Payslip</a></li>
                             </ul>
                         </div>

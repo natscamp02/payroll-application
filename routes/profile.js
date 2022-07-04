@@ -5,6 +5,7 @@ const { protect, handleSQLErrors, limitFields } = require('../utils');
 
 const router = express.Router();
 
+// Ensure users are logged in
 router.use(protect);
 
 router.get('/', (req, res, next) => {

@@ -3,14 +3,12 @@ const { protect } = require('../utils');
 
 const router = express.Router();
 
+// Ensure users are logged in
 router.use(protect);
 
 router.get('/', (req, res, next) => {
-	res.redirect('/dashboard');
-});
-
-router.get('/dashboard', (req, res, next) => {
-	res.render('index');
+	if (req.session.user.role === 'employee') res.redirect(`payroll/${req.session.user.id}/payslips`);
+	else res.redirect('/payroll');
 });
 
 module.exports = router;

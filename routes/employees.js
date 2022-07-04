@@ -6,8 +6,10 @@ const { protect, handleSQLErrors, restrictTo, limitFields } = require('../utils'
 
 const router = express.Router();
 
+// Ensure users are logged in and only allow certain roles
 router.use(protect, restrictTo('supervisor', 'accountant'));
 
+// Display list of employees
 router.get('/', (req, res, next) => {
 	let sqlQuery =
 		"SELECT staff.*, dpts.dprt_name FROM staff, departments dpts WHERE staff.department_id = dpts.id AND NOT staff.position = 'supervisor'";
@@ -31,10 +33,12 @@ router.get('/', (req, res, next) => {
 	);
 });
 
+// Show employee add page
 router.get('/add', restrictTo('supervisor'), (req, res, next) => {
 	res.render('employees/add');
 });
 
+//
 router.post('/add', restrictTo('supervisor'), async (req, res, next) => {
 	const data = limitFields(req.body, ['first_name', 'last_name', 'email', 'position']);
 

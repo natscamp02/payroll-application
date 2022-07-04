@@ -5,14 +5,17 @@ const { limitFields, handleSQLErrors } = require('../utils');
 
 const router = express.Router();
 
+// Redirect to login page
 router.get('/', (req, res) => {
 	res.redirect('login');
 });
 
+// Display login page
 router.get('/login', (req, res) => {
 	res.render('auth/login');
 });
 
+// Handle login request
 router.post('/login', (req, res, next) => {
 	const data = limitFields(req.body, ['email', 'password']);
 
@@ -43,11 +46,12 @@ router.post('/login', (req, res, next) => {
 				role: users[0].position,
 			};
 
-			res.redirect('/dashboard');
+			res.redirect('/');
 		})
 	);
 });
 
+// Log the user out
 router.get('/logout', (req, res, next) => {
 	req.session.destroy();
 	res.redirect('/auth/login');
