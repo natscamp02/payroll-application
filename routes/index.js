@@ -6,6 +6,7 @@ const router = express.Router();
 // Ensure users are logged in
 router.use(protect);
 
+// Redirect the user based on their role
 router.get('/', (req, res, next) => {
 	if (req.session.user.role === 'employee') res.redirect(`payroll/${req.session.user.id}/payslips`);
 	else res.redirect('/payroll');

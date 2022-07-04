@@ -38,7 +38,7 @@ router.get('/add', restrictTo('supervisor'), (req, res, next) => {
 	res.render('employees/add');
 });
 
-//
+// Add a new employee to the database
 router.post('/add', restrictTo('supervisor'), async (req, res, next) => {
 	const data = limitFields(req.body, ['first_name', 'last_name', 'email', 'position']);
 
@@ -71,6 +71,7 @@ router.post('/add', restrictTo('supervisor'), async (req, res, next) => {
 	);
 });
 
+// Show employee edit page
 router.get('/:id/edit', (req, res, next) => {
 	conn.query(
 		'SELECT * FROM staff WHERE id = ' + req.params.id,
@@ -80,6 +81,7 @@ router.get('/:id/edit', (req, res, next) => {
 	);
 });
 
+// Update an employee in the database
 router.post('/update', (req, res, next) => {
 	const data = limitFields(req.body, ['first_name', 'last_name', 'email', 'position']);
 
@@ -93,6 +95,7 @@ router.post('/update', (req, res, next) => {
 	);
 });
 
+// Remove an employee from the database
 router.get('/:id/delete', (req, res, next) => {
 	conn.query(
 		`DELETE FROM staff WHERE id = ${req.params.id}`,

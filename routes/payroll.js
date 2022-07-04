@@ -7,6 +7,7 @@ const router = express.Router();
 // Ensure users are logged in
 router.use(protect);
 
+// Show payroll information for the active paycycle
 router.get('/', restrictTo('supervisor', 'accountant'), (req, res, next) => {
 	let sqlQuery = `SELECT prl.*, prl.id AS payroll_id, staff.*, staff.id AS employee_id, dpts.*, pc.*
     FROM payroll prl, departments dpts, staff, paycycles pc
@@ -30,6 +31,7 @@ router.get('/', restrictTo('supervisor', 'accountant'), (req, res, next) => {
 	);
 });
 
+// Show a salary summary per department
 router.get('/summary', restrictTo('supervisor'), (req, res, next) => {
 	conn.query(
 		`SELECT SUM(prl.net_pay) AS total_pay, SUM(prl.hours_worked) AS total_hours, SUM(prl.hours_overtime) AS total_overtime, 
@@ -45,6 +47,7 @@ router.get('/summary', restrictTo('supervisor'), (req, res, next) => {
 	);
 });
 
+// Start an new paycycle
 router.get('/paycycles/new', restrictTo('accountant'), (req, res, next) => {
 	// Get prev and new paydays
 	conn.query(
@@ -78,6 +81,7 @@ router.get('/paycycles/new', restrictTo('accountant'), (req, res, next) => {
 	);
 });
 
+// Show all payslips for a certain employee
 router.get('/:emp_id/payslips', restrictTo('employee'), (req, res, next) => {
 	// Get selected employee
 	conn.query(
@@ -98,42 +102,45 @@ router.get('/:emp_id/payslips', restrictTo('employee'), (req, res, next) => {
 		})
 	);
 });
+
+// Handle filtering of paycycles
 router.post('/:emp_id/payslips', restrictTo('accountant'), (req, res, next) => {
 	res.redirect(`/payroll/${req.params.emp_id}/payslips/${req.body.paycycle_id}`);
 });
 
+// Get an employee's payslip for a given paycycle
 router.get('/:emp_id/payslips/:paycycle_id', (req, res, next) => {
-	let sqlQuery =
-		// Get salary details for this employee
-		conn.query(
-			`SELECT *, pcs.id AS paycycle_id
+	// Get salary details for this employee
+	conn.query(
+		`SELECT *, pcs.id AS paycycle_id
         FROM payroll prl, staff, departments dpts, paycycles pcs
         WHERE prl.employee_id = staff.id AND staff.department_id = dpts.id AND prl.paycycle_id = pcs.id 
         AND pcs.id = ${req.params.paycycle_id} AND prl.employee_id = ${req.params.emp_id}
         `,
-			handleSQLErrors(next, (results) => {
-				if (!results?.length) return res.render('error/not-found');
+		handleSQLErrors(next, (results) => {
+			if (!results?.length) return res.render('error/not-found');
 
-				if (req.session.user.role === 'accountant') {
-					// Get all paycycles for filtering
-					conn.query(
-						`SELECT pcs.* FROM payroll prl, paycycles pcs WHERE prl.paycycle_id = pcs.id AND prl.employee_id = ${req.params.emp_id}`,
-						handleSQLErrors(next, (paycycles) => {
-							console.log(paycycles);
+			if (req.session.user.role === 'accountant') {
+				// Get all paycycles for filtering
+				conn.query(
+					`SELECT pcs.* FROM payroll prl, paycycles pcs WHERE prl.paycycle_id = pcs.id AND prl.employee_id = ${req.params.emp_id}`,
+					handleSQLErrors(next, (paycycles) => {
+						console.log(paycycles);
 
-							res.render('payroll/payslips/details', {
-								data: results[0],
-								paycycles: paycycles.reverse(),
-							});
-						})
-					);
-				} else {
-					res.render('payroll/payslips/details', { data: results[0] });
-				}
-			})
-		);
+						res.render('payroll/payslips/details', {
+							data: results[0],
+							paycycles: paycycles.reverse(),
+						});
+					})
+				);
+			} else {
+				res.render('payroll/payslips/details', { data: results[0] });
+			}
+		})
+	);
 });
 
+// Update an employee's salary information
 router.post('/update', restrictTo('supervisor', 'accountant'), (req, res, next) => {
 	const data = limitFields(req.body, ['hours_worked', 'hours_overtime', 'days_absent']);
 

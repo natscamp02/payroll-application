@@ -8,6 +8,7 @@ const router = express.Router();
 // Ensure users are logged in
 router.use(protect);
 
+// Show user's profile
 router.get('/', (req, res, next) => {
 	conn.query(
 		'SELECT * FROM staff WHERE id = ' + req.session.user.id,
@@ -17,6 +18,7 @@ router.get('/', (req, res, next) => {
 	);
 });
 
+// Update user's profile information
 router.post('/update/info', (req, res, next) => {
 	const data = limitFields(req.body, ['first_name', 'last_name', 'email']);
 
@@ -30,6 +32,7 @@ router.post('/update/info', (req, res, next) => {
 	);
 });
 
+// Update user's password
 router.post('/update/password', (req, res, next) => {
 	conn.query(
 		'SELECT password FROM staff WHERE id = ' + req.session.user.id,
